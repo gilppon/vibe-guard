@@ -141,7 +141,7 @@ Run tests with `pytest`:
 pytest tests/ -v
 ```
 
-11/11 tests pass in `< 0.1s`.
+11/11 tests pass in `0.06s` (Blazing fast, zero-bloat test suite).
 
 ---
 
