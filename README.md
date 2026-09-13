@@ -3,7 +3,7 @@
 > **The 0.1ms, Zero-Config AI Agent Security Shield.**  
 > Built for **vibe coders and AI app builders** who want bulletproof security without enterprise bloat.
 
-[![PyPI Version](https://img.shields.io/pypi/v/vibe-guard.svg)](https://pypi.org/project/vibe-guard/)
+[![PyPI Version](https://img.shields.io/pypi/v/vibe-guard-ai.svg)](https://pypi.org/project/vibe-guard-ai/)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-11%20passing-brightgreen.svg)]()
 [![Latency](https://img.shields.io/badge/latency-%3C0.1ms-purple.svg)]()
@@ -21,7 +21,7 @@ Traditional AI guardrails (NeMo, Llama Guard, cloud proxies) are **slow, heavy, 
 
 **`vibe-guard` changes this completely:**
 - ⚡ **0.1ms Fast-Fail**: Blazing-fast regex & normalization runs in-memory before LLM inference.
-- 🛡️ **Zero Setup**: `pip install vibe-guard` and add 1 line of code.
+- 🛡️ **Zero Setup**: `pip install vibe-guard-ai` and add 1 line of code.
 - 🔒 **Full Lifecycle Defense**: Blocks prompt injection, path traversal, SSRF, and credential leaks.
 - 🪶 **Zero Bloat**: Pure Python + Pydantic. No Docker, no external services required.
 
@@ -32,7 +32,7 @@ Traditional AI guardrails (NeMo, Llama Guard, cloud proxies) are **slow, heavy, 
 ### Installation
 
 ```bash
-pip install vibe-guard
+pip install vibe-guard-ai
 ```
 
 ### 1. Function Decorator (Drop-in Protection)

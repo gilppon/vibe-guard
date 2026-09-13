@@ -16,7 +16,7 @@
 
 **`vibe-guard`はこれらを1行のコードで解決します：**
 - ⚡ **0.1ms Fast-Fail**: LLM推論が始まる前に、インメモリで0.1ms以内に攻撃をブロック。
-- 🛡️ **設定ゼロ**: `pip install vibe-guard` を実行し、1行追加するだけ。
+- 🛡️ **設定ゼロ**: `pip install vibe-guard-ai` を実行し、1行追加するだけ。
 - 🔒 **4大脅威を完全防御**: プロンプトインジェクション、パストラバーサル、SSRF、秘密鍵漏洩を遮断。
 - 🪶 **純粋なPython**: Dockerなし、Cバインディングなし、`Pydantic`のみを使用。
 
@@ -27,7 +27,7 @@
 ### インストール
 
 ```bash
-pip install vibe-guard
+pip install vibe-guard-ai
 ```
 
 ### 1. 関数デコレータ（即座に保護）
