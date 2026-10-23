@@ -50,6 +50,38 @@ _PROMPT_PATTERNS: tuple[PromptPattern, ...] = (
         risk_score=80,
         reason="Role override or DAN-style jailbreak attempt detected",
     ),
+    # Multilingual / Korean Prompt Injection Patterns
+    PromptPattern(
+        code="KOREAN_INSTRUCTION_OVERRIDE",
+        pattern=re.compile(
+            r"(?i)(?:이전(?:의\s+모든)?\s*지시(?:사항)?(?:을)?\s*무시|"
+            r"시스템\s*지시(?:를)?\s*무시|"
+            r"보안\s*설정(?:을)?\s*해제|"
+            r"기존\s*규칙(?:을)?\s*모두\s*취소)"
+        ),
+        risk_score=90,
+        reason="Korean system instruction override attempt detected",
+    ),
+    PromptPattern(
+        code="KOREAN_SYSTEM_PROMPT_EXTRACTION",
+        pattern=re.compile(
+            r"(?i)(?:새로운\s*시스템\s*프롬프트|"
+            r"시스템\s*프롬프트(?:를)?\s*(?:출력|보여줘|알려줘|공개)|"
+            r"초기\s*(?:지시|프롬프트)(?:를)?\s*(?:출력|보여줘))"
+        ),
+        risk_score=90,
+        reason="Korean system prompt extraction attempt detected",
+    ),
+    PromptPattern(
+        code="KOREAN_ROLE_OVERRIDE_JAILBREAK",
+        pattern=re.compile(
+            r"(?i)(?:관리자\s*모드로\s*전환|"
+            r"개발자\s*모드로\s*전환|"
+            r"탈옥\s*모드(?:를)?\s*(?:활성화|시작))"
+        ),
+        risk_score=85,
+        reason="Korean role override or jailbreak mode attempt detected",
+    ),
     PromptPattern(
         code="DATA_EXFILTRATION_ATTEMPT",
         pattern=re.compile(

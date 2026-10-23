@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import asyncio
 import inspect
+from collections.abc import Callable
 from functools import wraps
-from typing import Any, Callable, TypeVar, Optional
+from typing import Any, TypeVar
 
 from vibe_guard.core import EvaluationResult, SecurityException
 from vibe_guard.detectors.pii import scan_output
@@ -50,11 +51,11 @@ class SafeTool:
     def __init__(
         self,
         func: Callable[..., Any],
-        name: Optional[str] = None,
+        name: str | None = None,
         *,
         block_resource_abuse: bool = True,
         raise_on_violation: bool = True,
-        slack_webhook: Optional[str] = None,
+        slack_webhook: str | None = None,
     ) -> None:
         self.func = func
         self.name = name or getattr(func, "__name__", "tool")
@@ -106,11 +107,11 @@ class SafeTool:
 
 
 def safe_tool(
-    name: Optional[str] = None,
+    name: str | None = None,
     *,
     block_resource_abuse: bool = True,
     raise_on_violation: bool = True,
-    slack_webhook: Optional[str] = None,
+    slack_webhook: str | None = None,
 ) -> Callable[[F], SafeTool]:
     """Decorator to enforce path & SSRF security checks on individual tools."""
 
@@ -130,8 +131,8 @@ def protect(
     block_injection: bool = True,
     block_resource_abuse: bool = True,
     mask_secrets: bool = True,
-    slack_webhook: Optional[str] = None,
-    endpoint: Optional[str] = None,
+    slack_webhook: str | None = None,
+    endpoint: str | None = None,
     raise_on_violation: bool = True,
 ) -> Callable[[F], F]:
     """Function decorator to protect any sync or async agent function."""
@@ -199,8 +200,8 @@ class SafeAgent:
         block_injection: bool = True,
         block_resource_abuse: bool = True,
         mask_secrets: bool = True,
-        slack_webhook: Optional[str] = None,
-        endpoint: Optional[str] = None,
+        slack_webhook: str | None = None,
+        endpoint: str | None = None,
         raise_on_violation: bool = True,
     ) -> None:
         self._agent = agent

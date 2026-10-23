@@ -54,6 +54,41 @@ _REDACT_PATTERNS: tuple[RedactPattern, ...] = (
 )
 
 
+
+# Markdown & HTML Image Exfiltration Patterns
+_MARKDOWN_IMAGE_PATTERN = re.compile(r"!\[.*?\]\((https?://[^\s)]+)\)")
+_HTML_IMAGE_PATTERN = re.compile(r"""<img[^>]+src=["'](https?://[^"']+)["']""", re.IGNORECASE)
+_SUSPICIOUS_QUERY_PATTERN = re.compile(r"[?&](?:leak|exfil|drain|token|secret|key|pwd|password|data)=", re.IGNORECASE)
+
+
+def detect_image_exfiltration(raw_text: str) -> tuple[str, bool, str]:
+    """Detect and sanitize markdown or HTML image tags used for data exfiltration."""
+    if not raw_text:
+        return raw_text, False, ""
+
+    sanitized = raw_text
+    found_exfil = False
+    reason = ""
+
+    # Check Markdown images
+    for match in _MARKDOWN_IMAGE_PATTERN.finditer(raw_text):
+        url = match.group(1)
+        if _SUSPICIOUS_QUERY_PATTERN.search(url):
+            found_exfil = True
+            reason = "Markdown image exfiltration URL detected"
+            sanitized = sanitized.replace(match.group(0), "[REDACTED_IMAGE_EXFIL]")
+
+    # Check HTML images
+    for match in _HTML_IMAGE_PATTERN.finditer(raw_text):
+        url = match.group(1)
+        if _SUSPICIOUS_QUERY_PATTERN.search(url):
+            found_exfil = True
+            reason = "HTML image exfiltration URL detected"
+            sanitized = sanitized.replace(match.group(0), "[REDACTED_IMAGE_EXFIL]")
+
+    return sanitized, found_exfil, reason
+
+
 def mask_pii_and_secrets(raw_text: str) -> tuple[str, list[str]]:
     """Scan and deterministically redact sensitive API keys and PII."""
     if not raw_text:
@@ -71,9 +106,20 @@ def mask_pii_and_secrets(raw_text: str) -> tuple[str, list[str]]:
 
 
 def scan_output(output_text: str, mask: bool = True) -> EvaluationResult:
-    """Evaluate LLM or tool output for secrets and PII leaks."""
+    """Evaluate LLM or tool output for secrets, PII leaks, and markdown image exfiltration."""
     if not output_text or not output_text.strip():
         return EvaluationResult(is_safe=True, cleaned_text="")
+
+    # 1. Check for markdown / HTML image exfiltration
+    sanitized, found_exfil, exfil_reason = detect_image_exfiltration(output_text)
+    if found_exfil:
+        return EvaluationResult(
+            is_safe=False,
+            violation_type=SecurityViolation.MARKDOWN_IMAGE_EXFIL,
+            reason=exfil_reason,
+            risk_score=95,
+            cleaned_text=sanitized if mask else output_text,
+        )
 
     sanitized, detected = mask_pii_and_secrets(output_text)
 

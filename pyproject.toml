@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "vibe-guard-ai"
-version = "0.1.0"
+version = "0.2.0"
 description = "Ultra-lightweight, zero-config, 0.1ms In-Process AI agent security guard"
 readme = "README.md"
 requires-python = ">=3.10"

@@ -5,10 +5,10 @@ from __future__ import annotations
 import json
 import logging
 import threading
-from datetime import datetime, timezone
-from typing import Any, Optional
-import urllib.request
 import urllib.error
+import urllib.request
+from datetime import UTC, datetime
+from typing import Any
 
 from vibe_guard.core import EvaluationResult
 
@@ -35,7 +35,7 @@ def log_block(result: EvaluationResult, context_name: str = "Agent") -> None:
 def dispatch_webhook_alert(
     webhook_url: str,
     result: EvaluationResult,
-    context: Optional[dict[str, Any]] = None,
+    context: dict[str, Any] | None = None,
 ) -> None:
     """Fire-and-forget background alert payload to a Slack webhook or HTTP endpoint."""
     if not webhook_url:
@@ -43,7 +43,7 @@ def dispatch_webhook_alert(
 
     payload = {
         "text": f"🚨 [VIBE-GUARD ALERT] {result.violation_type.value if result.violation_type else 'VIOLATION'}: {result.reason}",
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "violation_type": result.violation_type.value if result.violation_type else "UNKNOWN",
         "risk_score": result.risk_score,
         "reason": result.reason,
